@@ -8,7 +8,7 @@ def getList(File:bool = True):
     if File:
         return [f for f in os.listdir(os.getcwd()) if os.path.isfile(f)]
     else:
-        return [f for f in os.listdir(os.getcwd()) if os.path.isdir(f)]
+        return [f for f in os.listdir(os.getcwd()) if not os.path.isfile(f)]
 
 def createFolder(folder:str):
     path=os.path.join(os.getcwd(),folder)
@@ -16,23 +16,27 @@ def createFolder(folder:str):
     print(f"Created new folder:{folder}")
 
 def movefile(file:str,folder:str):
-    file = f"{os.getcwd()}/{file}"
-    destination = f"{os.getcwd()}/{folder}/{file}"
+    file = f"{os.getcwd()}\\{file}"
+    nameNew = file.lstrip(file[0:file.find("]")+1])
+    destination = f"{os.getcwd()}\\{folder}\\{nameNew}"
     os.rename(file,destination)
     #moves {file} from working dir to dir/folder
 
+print(f"Currently executing program in {os.getcwd}")
 while True:
     for i in getList():
+        if i.startswith("["):
+            print(f"File:{i}")
+            folderlist = getList(False)
+            print(f"FolderList:{folderlist}")
+            try:
 
-        folderlist = getList(False)
-
-        try:
-
-            folder=i[1:i.find("]")]
-            if folder not in folderlist:
-                createFolder(folder)
+                folder=i[1:i.find("]")]
+                print(f"Folder:{folder}")
+                if folder not in folderlist:
+                    createFolder(folder)
+                
+                movefile(i,folder)
             
-            movefile(i,folder)
-        
-        except Exception as Error:
-            print(f"An error occurred: {Error}")
+            except Exception as Error:
+                print(f"An error occurred: {Error}")
