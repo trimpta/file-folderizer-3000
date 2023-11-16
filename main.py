@@ -4,8 +4,8 @@
 
 import os
 
-def getList(File:bool = True):
-    if File:
+def getList(file:bool = True):
+    if file:
         return [f for f in os.listdir(os.getcwd()) if os.path.isfile(f)]
     else:
         return [f for f in os.listdir(os.getcwd()) if not os.path.isfile(f)]
@@ -16,13 +16,13 @@ def createFolder(folder:str):
     print(f"Created new folder:{folder}")
 
 def movefile(file:str,folder:str):
-    file = f"{os.getcwd()}\\{file}"
-    nameNew = file.lstrip(file[0:file.find("]")+1])
-    destination = f"{os.getcwd()}\\{folder}\\{nameNew}"
+    file = os.path.join(os.getcwd(),file)
+    name_new = file.lstrip(file[0:file.find("]")+1])
+    destination = os.path.join(os.getcwd(),folder,name_new)
     os.rename(file,destination)
-    #moves {file} from working dir to dir/folder
+    #moves {file} from working dir to dir/folder after removing the [folder] prefix
 
-print(f"Currently executing program in {os.getcwd}")
+print(f"Currently executing program in {os.getcwd()}")
 while True:
     for i in getList():
         if i.startswith("["):
