@@ -14,9 +14,3 @@ for i in list:
         test(files,folders)
 
 test("random","random")
-
-do_the_thing()
-
-test("random","random")
-
-do_the_thing()
