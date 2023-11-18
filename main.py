@@ -32,6 +32,31 @@ def movefile(file:str,folder:str):
 
     print(f"Moved   {file} to {destination}.")
     #moves {file} from working dir to dir/folder after removing the [folder] prefix
+def do_the_thing():
+    for i in get_file_list():
+    
+        if i.startswith("["):
+            print(f"File:{i}")
+            try:
+
+                folder=i[1:i.find("]")]
+                print(f"Folder:{folder}")
+                if os.path.exists(folder):
+                    if not os.path.isdir(i):
+                        raise ValueError("sorry bro ur dum dum")
+                    else:
+                        raise ValueError("User attempted to create folder which already exists as a file.")
+                else:
+                    create_folder(folder)
+
+                time.sleep(0.1)       #for mitigating windows error
+                movefile(i,folder)
+                f.write(f'{date_printable()} {time_printable()}:       Moved       {i.lstrip(i[0:i.find("]")+1])} to {folder}.\n')
+
+            except Exception as Error:
+                print(f"{date_printable()}  An error occurred: {Error}")
+                f.write(f"{date_printable()} {time_printable()}    An error occurred: {Error}\n")
+
 
 log_file=f"folderizer-log-{date_printable() }.txt"
 
@@ -39,29 +64,5 @@ with open(log_file,"a") as f:
     f.write(f"Currently executing program in {os.getcwd()}\nTime:{time.ctime()}")
     print(f"Currently executing program in {os.getcwd()}")
     while True:
-        
-        for i in get_file_list():
-        
-            if i.startswith("["):
-                print(f"File:{i}")
-                try:
-
-                    folder=i[1:i.find("]")]
-                    print(f"Folder:{folder}")
-                    if os.path.exists(folder):
-                        if not os.path.isdir(folder):
-                            raise ValueError("sorry bro ur dum dum")
-                        else:
-                            print(f"Error: You have tried to create a folder which already exists as a file.")
-                            f.write(f"{date_printable()} {time_printable()} An error occurred: User attempted to create folder which already exists as a file.")
-                    else:
-                        create_folder(folder)
-
-                    time.sleep(0.1)       #for mitigating windows error
-                    movefile(i,folder)
-                    f.write(f'{date_printable()} {time_printable()}:       Moved       {i.lstrip(i[0:i.find("]")+1])} to {folder}.\n')
-
-                except Exception as Error:
-                    print(f"{date_printable()}  An error occurred: {Error}")
-                    f.write(f"{date_printable()} {time_printable()}    An error occurred: {Error}\n")
+        do_the_thing()
         time.sleep(60)
